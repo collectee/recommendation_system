@@ -1,0 +1,33 @@
+{
+  "name": "recommandation_system",
+  "version": "1.0.0",
+  "description": "推荐系统-图书-基于内容-协同过滤",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/collectee/recommendation_system.git"
+  },
+  "keywords": [
+    "recommendation",
+    "good-books",
+    "content-based",
+    "collaborative",
+    "fitter",
+    "nodejs"
+  ],
+  "author": "zyukyun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/collectee/recommendation_system/issues"
+  },
+  "homepage": "https://github.com/collectee/recommendation_system#readme",
+  "dependencies": {
+    "ml-matrix": "^6.1.0",
+    "numbers": "^0.7.0",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5"
+  }
+}
