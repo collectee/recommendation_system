@@ -5,18 +5,18 @@ let {Calc} = require('./matrix')
 
 let fileName = {
     clean:{
-        books:path.join(__dirname,'clean/books_clean.csv'),
-        books_users_rating:path.join(__dirname,'clean/books_clean_rating.csv'),
-        users:path.join(__dirname,'clean/users_clean.csv')
+        books:path.join(__dirname,'../public','clean/books_clean.csv'),
+        books_users_rating:path.join(__dirname,'../public','clean/books_clean_rating.csv'),
+        users:path.join(__dirname,'../public','clean/users_clean.csv')
     },
     reduce:{
-        rating:path.join(__dirname,'clean/reduced_books_users_ratings.csv'),
-        rating_location:path.join(__dirname,'clean/reduced_books_users_ratings_locations.csv')
+        rating:path.join(__dirname,'../public','clean/reduced_books_users_ratings.csv'),
+        rating_location:path.join(__dirname,'../public','clean/reduced_books_users_ratings_locations.csv')
     },
     raw:{
-        books_rating:path.join(__dirname,'BX-Books.csv'),
-        books:path.join(__dirname,'BX-Book-Ratings.csv'),
-        users:path.join(__dirname,'BX-Users.csv')
+        books_rating:path.join(__dirname,'../public','BX-Books.csv'),
+        books:path.join(__dirname,'../public','BX-Book-Ratings.csv'),
+        users:path.join(__dirname,'../public','BX-Users.csv')
     }
 }
 
