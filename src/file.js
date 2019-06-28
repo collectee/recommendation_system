@@ -21,8 +21,6 @@ let fileName = {
 }
 
 function fileReduce() {
-    this.is_id = {},
-    this.id_is = {}
 }
 fileReduce.prototype = {
     fileName: '',
@@ -52,8 +50,6 @@ fileReduce.prototype = {
         this.rl.on('line', (line) => {
             let row = line.split(',')
             afterArr.push(row)
-            this.is_id[row[0]] = i
-            this.id_is[i++] = row[0]
         })
         this.rl.on('close',() => {
             afterArr.shift()
@@ -97,6 +93,7 @@ fileReduce.prototype = {
         data.map((row)=>{
             if(!this.unique_user_theta[row[0]]){
                 this.unique_user_theta[row[0]]={
+                    age:Math.floor((parseInt(row[8])-10)/15),
                     sum:0,
                     rating:new Array(4).fill(0)
                 }
@@ -108,9 +105,9 @@ fileReduce.prototype = {
         })
         let userlist = {}
         for(user in this.unique_user_theta){
-            userlist[user] = this.unique_user_theta[user].rating.map((row) => {
+            userlist[user] = this.unique_user_theta[user].rating.map((row,i) => {
                 let leng = Math.max(...this.unique_user_theta[user].rating)-Math.min(...this.unique_user_theta[user].rating)
-                return this.sigmoid(row/this.unique_user_theta[user].sum - 0.5) * 10
+                return i!==this.unique_user_theta[user].age ? this.sigmoid(row/this.unique_user_theta[user].sum - 0.5) * 10 : 10
             })
         }
         return userlist
@@ -160,6 +157,18 @@ fileReduce.prototype = {
         this.books = book
         this.users = user
         this.data = rs
+    },
+    precise (matrix) {
+        let cl = new Calc()
+        let sum = 0
+        let length = this.data.length
+        this.data.map((row) => {
+            let user = this.users.id[row[0]]
+            let book = this.books.id[row[1]]
+            let mt = isNaN(matrix[user][book])?row[2]:matrix[user][book]     //突然出现了userID：31315 数据全部预测失败
+            sum += parseFloat((row[2] - mt))
+        })
+        return 100 - ((sum*10)/length) + ' %'
     },
     sigmoid (x,step = 1) {
         return 1/(1+Math.exp(step*x))

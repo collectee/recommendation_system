@@ -23,12 +23,17 @@ Promise.all([pm2]).then(function(result){       //梯度下降处理，predict�
     fileBook.impect(result[0],book_theta,user_theta)
 
     //梯度下降单一过滤，求出用户感兴趣的年龄层书籍的分布
-    let after_descent = fileBook.gradient_descent(0.002)
+    let after_descent = fileBook.gradient_descent(0.001)
 
     //书籍参数(原) X 梯度下降后的用户参数
     let out = cl.multiMatrix(after_descent, book_theta.arr)
 
-    main(out,'179423','375408312')
+    //验证准确率
+    let precise = fileBook.precise(out)
+    console.log('准确率：',precise)
+
+    //操作函数
+    main(out,'33974','446610127')
 })
 
 function main (matrix,userID,ISBN){       //主要执行函数 params: 预测后的矩阵
@@ -37,7 +42,6 @@ function main (matrix,userID,ISBN){       //主要执行函数 params: 预测后
     // let relateBook = fileBook.mostRelative([.2,.4,.4,0],book)
     // let show = fileBook.unique_book_theta[relateBook]
 
-
     // console.log(matrix)
-    console.log(matrix[fileBook.users.id[userID]][fileBook.books.id[ISBN]])
+    console.log('预测值：',matrix[fileBook.users.id[userID]][fileBook.books.id[ISBN]])
 }
