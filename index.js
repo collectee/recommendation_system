@@ -1,5 +1,4 @@
-let numbers = require('numbers')
-let {Matrix,Calc} = require('./src/matrix')
+let {Calc} = require('./src/matrix')
 let {fileName,fileReduce} = require('./src/file')
 
 let fileBook = new fileReduce()     //bookReduce
@@ -23,7 +22,7 @@ Promise.all([pm2]).then(function(result){       //梯度下降处理，predict�
     fileBook.impect(result[0],book_theta,user_theta)
 
     //梯度下降单一过滤，求出用户感兴趣的年龄层书籍的分布
-    let after_descent = fileBook.gradient_descent(0.001)
+    let after_descent = fileBook.gradient_descent(0.001,0.001,0.015)
 
     //书籍参数(原) X 梯度下降后的用户参数
     let out = cl.multiMatrix(after_descent, book_theta.arr)
@@ -33,7 +32,7 @@ Promise.all([pm2]).then(function(result){       //梯度下降处理，predict�
     console.log('准确率：',precise)
 
     //操作函数
-    main(out,'33974','446610127')
+    main(out,'32188','385497466')
 })
 
 function main (matrix,userID,ISBN){       //主要执行函数 params: 预测后的矩阵

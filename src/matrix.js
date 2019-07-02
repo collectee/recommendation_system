@@ -86,7 +86,7 @@ class Calc extends Mtrix {
             })
         })
     }
-    multiMatrix(d1,d2) {       //theta(j)T * x(i)
+    multiMatrix(d1,d2) {       <!-- theta(j)T * x(i) -->
         return d1.map((row,i) => {
             console.log(parseInt(i/d1.length*100)+'%')
             return d2.map((col) => {

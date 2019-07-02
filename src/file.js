@@ -5,18 +5,18 @@ let {Calc} = require('./matrix')
 
 let fileName = {
     clean:{
-        books:path.join(__dirname,'../public','clean/books_clean.csv'),
-        books_users_rating:path.join(__dirname,'../public','clean/books_clean_rating.csv'),
-        users:path.join(__dirname,'../public','clean/users_clean.csv')
+        books:path.join(__dirname,'../data','clean/books_clean.csv'),
+        books_users_rating:path.join(__dirname,'../data','clean/books_clean_rating.csv'),
+        users:path.join(__dirname,'../data','clean/users_clean.csv')
     },
     reduce:{
-        rating:path.join(__dirname,'../public','clean/reduced_books_users_ratings.csv'),
-        rating_location:path.join(__dirname,'../public','clean/reduced_books_users_ratings_locations.csv')
+        rating:path.join(__dirname,'../data','clean/reduced_books_users_ratings.csv'),
+        rating_location:path.join(__dirname,'../data','clean/reduced_books_users_ratings_locations.csv')
     },
     raw:{
-        books_rating:path.join(__dirname,'../public','BX-Books.csv'),
-        books:path.join(__dirname,'../public','BX-Book-Ratings.csv'),
-        users:path.join(__dirname,'../public','BX-Users.csv')
+        books_rating:path.join(__dirname,'../data','BX-Books.csv'),
+        books:path.join(__dirname,'../data','BX-Book-Ratings.csv'),
+        users:path.join(__dirname,'../data','BX-Users.csv')
     }
 }
 
@@ -113,26 +113,23 @@ fileReduce.prototype = {
         return userlist
     },
     J () {
-        this.reduceMatrix = new Array(this.users.arr.length).fill(0)
+        this.reduceMatrix = new Array(this.users.arr.length).fill([0,0,0,0])
         let cl = new Calc()
         this.data.map((row)=>{
             let b_id = this.books.id[row[1]]
             let u_id = this.users.id[row[0]]
-            this.reduceMatrix[u_id] += (cl.multi([this.books.arr[b_id]],cl.transpose(this.users.arr[u_id]))[0][0] - parseInt(row[2]))
-        })
-        this.reduceMatrix = this.reduceMatrix.map((row,i) => {
-            return this.users.arr[i].map((col) => {
-                return row * col
+            this.reduceMatrix[u_id] = this.reduceMatrix[u_id].map((n,index) => {
+                return n + (cl.multi([this.books.arr[b_id]],cl.transpose(this.users.arr[u_id]))[0][0] - parseInt(row[2]))*this.books.arr[b_id][index]
             })
         })
         return this.reduceMatrix
     },
-    gradient_descent (rate, namda = 0) {
-        let sp = 0.5,Jnum = [[100]]
-        while (sp < Math.abs(Jnum[0][0])) {
+    gradient_descent (rate,condition = 0.01, namda = 0) {
+        let Jnum = [[100]]
+        while (condition < Math.abs(Jnum[0][0])) {
             Jnum = this.J()
+            console.log(Jnum[0][0])
             this.users.arr = this.users.arr.map((row,i) => {
-                // console.log(Jnum[0][0])
                 return row.map((theta,k) => {
                     return theta - rate*Jnum[i][k] + namda*theta
                 })
@@ -166,7 +163,8 @@ fileReduce.prototype = {
             let user = this.users.id[row[0]]
             let book = this.books.id[row[1]]
             let mt = isNaN(matrix[user][book])?row[2]:matrix[user][book]     //突然出现了userID：31315 数据全部预测失败
-            sum += parseFloat((row[2] - mt))
+            let abs = Math.abs(row[2] - mt)
+            sum += abs < 1.5 ? abs : 10
         })
         return 100 - ((sum*10)/length) + ' %'
     },
